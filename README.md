@@ -18,14 +18,9 @@ CREATE TABLE TaxResponses (
 ## Screenshots
 Here are some screenshots showcasing the functionality of the web interface:
 
-![Tax question](https://github.com/irasharma13/Deloitte-Auditor-Enterprise-Chat/assets/36807339/eef43b60-42f3-4005-a8e8-682c18c7339b)
-*Tax question*
-
-![Non Tax question](https://github.com/irasharma13/Deloitte-Auditor-Enterprise-Chat/assets/36807339/66032205-10d9-41f9-9efe-472170eda351)
-*Non Tax question*
-
-![Saving question](https://github.com/irasharma13/Deloitte-Auditor-Enterprise-Chat/assets/36807339/77b6c39a-20a0-4423-b4ab-9f63f80d0156)
-*Saving question*
+<img width="1040" alt="Tax question - Screenshot" src="https://github.com/irasharma13/Deloitte-Auditor-Enterprise-Chat/assets/36807339/eef43b60-42f3-4005-a8e8-682c18c7339b">
+<img width="831" alt="Non Tax question - Screenshot" src="https://github.com/irasharma13/Deloitte-Auditor-Enterprise-Chat/assets/36807339/66032205-10d9-41f9-9efe-472170eda351">
+<img width="580" alt="Saving question - Screeshot" src="https://github.com/irasharma13/Deloitte-Auditor-Enterprise-Chat/assets/36807339/77b6c39a-20a0-4423-b4ab-9f63f80d0156">
 
 https://github.com/irasharma13/Deloitte-Auditor-Enterprise-Chat/assets/36807339/2451c1bc-8570-4438-9cdc-5a0886ebdba0
 

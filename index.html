@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Deloitte Auditor Enterprise Chat UI</title>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            Deloitte Auditor Enterprise Chat UI
+        </header>
+        <section class="content">
+            <label for="tax-prompt" class="form-label">Tax Prompt</label>
+            <textarea id="tax-prompt" rows="4" placeholder="Enter any tax question here..." class="input-text"></textarea>
+            <div class="buttons">
+                <button class="button send-button" id="send-btn">Send</button>
+                <button class="button cancel-button" id="cancel-btn">Cancel</button>
+            </div>
+            <label for="response-text" class="form-label">Response</label>
+            <textarea id="response-text" rows="4" readonly class="input-text"></textarea>
+            <div class="buttons">
+                <button class="button save-button" id="save-btn">Save</button>
+                <button class="button history-button" id="history-btn">View History</button>
+            </div>
+        </section>
+    </div>
+    <script>
+        const apiKey = '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';
+
+        // Open or create the IndexedDB database
+        const request = indexedDB.open('taxChatDB', 1);
+        let db;
+
+        request.onerror = function(event) {
+            console.error("Database error: " + event.target.errorCode);
+        };
+
+        request.onsuccess = function(event) {
+            db = event.target.result;
+        };
+
+        request.onupgradeneeded = function(event) {
+            db = event.target.result;
+            const objectStore = db.createObjectStore("responses", { keyPath: "id", autoIncrement: true });
+            objectStore.createIndex("prompt", "prompt", { unique: false });
+            objectStore.createIndex("response", "response", { unique: false });
+        };
+
+        let msg = [];
+
+        document.getElementById('send-btn').addEventListener('click', function() {
+            document.getElementById('response-text').value = 'Please wait for the answer to be generated ..';
+            const taxPrompt = document.getElementById('tax-prompt').value;
+            window.latestPrompt = taxPrompt;
+            const appendedPrompt = "Answer this question only if it is a tax related question, else deny it - " + taxPrompt;
+            const newMsg = { "role": "user", "content": `${appendedPrompt}` };
+            msg.push(newMsg);
+            sessionStorage.setItem('history', JSON.stringify(msg));
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'https://api.openai.com/v1/chat/completions', true);
+            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            xhr.setRequestHeader('Authorization', `Bearer ${apiKey}`);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    document.getElementById('response-text').value = response.choices[0].message.content;
+                    window.latestResponse = response.choices[0].message.content;
+                    const newMsgRes = { "role": "user", "content": `${response.choices[0].message.content}` };
+                    msg.push(newMsgRes);
+                    sessionStorage.setItem('history', JSON.stringify(msg));
+                    console.log(response);
+                }
+            };
+            const requestBody = {
+                "model": "gpt-3.5-turbo",
+                "messages": [
+{ "role": "system", "content": "You are an assistant trained to address queries specifically related to US Tax law. Your primary role is to help users file their taxes effectively by providing informed deductions and tax advice." },
+                    ...msg
+                ]
+            };
+            xhr.send(JSON.stringify(requestBody));
+        });
+
+        document.getElementById('save-btn').addEventListener('click', function() {
+            const prompt = window.latestPrompt;
+            const response = window.latestResponse;
+            const transaction = db.transaction(["responses"], "readwrite");
+            const objectStore = transaction.objectStore("responses");
+            const addRequest = objectStore.add({ prompt: prompt, response: response });
+
+            addRequest.onsuccess = function(event) {
+                alert('Your query and response are now saved!');
+            };
+
+            addRequest.onerror = function(event) {
+                console.error("Add request error: " + event.target.errorCode);
+            };
+        });
+
+        document.getElementById('history-btn').addEventListener('click', function() {
+            const transaction = db.transaction(["responses"], "readonly");
+            const objectStore = transaction.objectStore("responses");
+            const getRequest = objectStore.getAll();
+
+            getRequest.onsuccess = function(event) {
+                let displayMessages = 'Retrieved Messages:\n';
+                const results = event.target.result;
+                results.forEach(function(result) {
+                    displayMessages += `Prompt: ${result.prompt}\n`;
+                    displayMessages += `Response: ${result.response}\n\n`;
+                });
+                alert(displayMessages);
+            };
+
+            getRequest.onerror = function(event) {
+                console.error("Get request error: " + event.target.errorCode);
+            };
+        });
+    </script>
+</body>
+</html>

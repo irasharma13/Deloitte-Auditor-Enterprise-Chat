@@ -1,0 +1,111 @@
+/* Resetting default browser styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+body, html {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    background: #f9f9f9;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 20px;
+}
+
+.header {
+    font-size: 24px;
+    color: #28527a;
+    margin-bottom: 20px;
+}
+
+.content {
+    width: 100%;
+    max-width: 600px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    border: 1px solid #ddd;
+}
+
+.input-text {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    resize: none;
+    transition: border-color 0.3s;
+}
+
+.input-text:focus {
+    border-color: #28527a;
+}
+
+.form-label {
+    font-weight: bold;
+    margin-top: 10px;
+    display: block;
+    color: #333;
+}
+
+.buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.send-button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.send-button:hover {
+    background-color: #45a049;
+}
+
+.cancel-button {
+    background-color: #f44336;
+    color: white;
+}
+
+.cancel-button:hover {
+    background-color: #da190b;
+}
+
+.save-button {
+    background-color: #008CBA;
+    color: white;
+}
+
+.save-button:hover {
+    background-color: #005f87;
+}
+
+.history-button {
+    background-color: #e7e7e7;
+    color: black;
+}
+
+.history-button:hover {
+    background-color: #dcdcdc;
+}
